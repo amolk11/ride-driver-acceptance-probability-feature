@@ -408,7 +408,8 @@ def select_features(
             'Booking Value',
             'route_avg_price',
             'location_interaction',
-            'month'
+            'month',
+            'Booking Status'
         ]
 
         train_df = train_df.drop(columns=drop_cols)

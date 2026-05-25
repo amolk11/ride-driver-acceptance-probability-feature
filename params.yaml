@@ -1,0 +1,11 @@
+model_building:
+  learning_rate: 0.01
+  n_estimators: 999
+  num_leaves: 31
+  min_child_samples: 50
+  subsample: 0.8
+  colsample_bytree: 0.7
+  reg_alpha: 1
+  reg_lambda: 1
+  class_weight: 'balanced'
+  random_state: 42

@@ -37,8 +37,8 @@ stages:
       size: 6963263
     - path: src/features/feature_engineering.py
       hash: md5
-      md5: 25848c3be0e6f29b3486d0e078e87ea6
-      size: 12362
+      md5: e852c2d7bb67ff1c603798fe8b5c747f
+      size: 12393
     - path: src/features/missing_value_imputer.py
       hash: md5
       md5: c85ebc9721f84c307d0d5d5fd35e9f7a
@@ -46,9 +46,45 @@ stages:
     outs:
     - path: data/processed/test.csv
       hash: md5
-      md5: 12f38c6ab4f84bee465a33f0e1c01d05
-      size: 1652196
+      md5: 1bf640d294a1419927bc30b99372c3b4
+      size: 1411613
     - path: data/processed/train.csv
       hash: md5
-      md5: 23e528dc09975d64f5ec8906f14678f1
-      size: 6498805
+      md5: ff15eb8928b0c52bb65bb9a7cccbcee4
+      size: 5536364
+  model_building:
+    cmd: python src/models/model_building.py
+    deps:
+    - path: data/processed/train.csv
+      hash: md5
+      md5: ff15eb8928b0c52bb65bb9a7cccbcee4
+      size: 5536364
+    - path: params.yaml
+      hash: md5
+      md5: bcc3363e440ccb987bd570c9ad2c4882
+      size: 227
+    - path: src/models/model_building.py
+      hash: md5
+      md5: 71596c626eb05826621c94e0f52b663c
+      size: 11284
+    params:
+      params.yaml:
+        model_building.class_weight: balanced
+        model_building.colsample_bytree: 0.7
+        model_building.learning_rate: 0.01
+        model_building.min_child_samples: 50
+        model_building.n_estimators: 1000
+        model_building.num_leaves: 31
+        model_building.random_state: 42
+        model_building.reg_alpha: 1
+        model_building.reg_lambda: 1
+        model_building.subsample: 0.8
+    outs:
+    - path: models/lightgbm_model.pkl
+      hash: md5
+      md5: 2b6506a676b15f0475665103a93b8e9a
+      size: 3361790
+    - path: models/scaler.pkl
+      hash: md5
+      md5: 9b3a26183d25fbd3a236ddf2dc93165b
+      size: 855
