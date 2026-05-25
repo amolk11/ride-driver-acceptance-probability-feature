@@ -12,3 +12,19 @@ stages:
       hash: md5
       md5: c18a25c9317629290a6849d8d435d6a9
       size: 15649927
+  data_processing:
+    cmd: python src/data/data_preprocessing.py
+    deps:
+    - path: data/external/uber.csv
+      hash: md5
+      md5: c18a25c9317629290a6849d8d435d6a9
+      size: 15649927
+    - path: src/data/data_preprocessing.py
+      hash: md5
+      md5: 82653744b2a09120873bb83851824650
+      size: 3639
+    outs:
+    - path: data/raw/driver_acceptance_data.csv
+      hash: md5
+      md5: 883fc0090e53fdc4d851794e11d7c0b1
+      size: 6963263

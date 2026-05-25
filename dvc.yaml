@@ -5,3 +5,11 @@ stages:
     - src/data/data_ingestion.py
     outs:
     - data/external/uber.csv
+
+  data_processing:
+    cmd: python src/data/data_preprocessing.py
+    deps:
+    - data/external/uber.csv
+    - src/data/data_preprocessing.py
+    outs:
+    - data/raw/driver_acceptance_data.csv
