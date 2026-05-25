@@ -21,10 +21,34 @@ stages:
       size: 15649927
     - path: src/data/data_preprocessing.py
       hash: md5
-      md5: 82653744b2a09120873bb83851824650
-      size: 3639
+      md5: 4f82ce1a7e6a87b1740c8a21e99fd6c3
+      size: 3961
     outs:
     - path: data/raw/driver_acceptance_data.csv
       hash: md5
       md5: 883fc0090e53fdc4d851794e11d7c0b1
       size: 6963263
+  feature_engineering:
+    cmd: python src/features/feature_engineering.py
+    deps:
+    - path: data/raw/driver_acceptance_data.csv
+      hash: md5
+      md5: 883fc0090e53fdc4d851794e11d7c0b1
+      size: 6963263
+    - path: src/features/feature_engineering.py
+      hash: md5
+      md5: 25848c3be0e6f29b3486d0e078e87ea6
+      size: 12362
+    - path: src/features/missing_value_imputer.py
+      hash: md5
+      md5: c85ebc9721f84c307d0d5d5fd35e9f7a
+      size: 2452
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 12f38c6ab4f84bee465a33f0e1c01d05
+      size: 1652196
+    - path: data/processed/train.csv
+      hash: md5
+      md5: 23e528dc09975d64f5ec8906f14678f1
+      size: 6498805

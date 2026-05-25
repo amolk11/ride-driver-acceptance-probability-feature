@@ -13,3 +13,13 @@ stages:
     - src/data/data_preprocessing.py
     outs:
     - data/raw/driver_acceptance_data.csv
+
+  feature_engineering:
+    cmd: python src/features/feature_engineering.py
+    deps:
+    - data/raw/driver_acceptance_data.csv
+    - src/features/feature_engineering.py
+    - src/features/missing_value_imputer.py
+    outs:
+    - data/processed/test.csv
+    - data/processed/train.csv

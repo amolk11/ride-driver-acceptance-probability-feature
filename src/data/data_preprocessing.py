@@ -81,37 +81,49 @@ def create_target_and_select_features(df: pd.DataFrame) -> pd.DataFrame:
     """
 
     try:
-        logger.info("Selecting features...")
+        logger.info("Starting feature selection and target creation...")
 
         features = [
-            'Datetime',
-            'Vehicle Type',
-            'Pickup Location',
-            'Drop Location',
-            'Booking Value',
-            'Booking Status'
+            "Datetime",
+            "Vehicle Type",
+            "Pickup Location",
+            "Drop Location",
+            "Booking Value",
         ]
 
-        missing_cols = [col for col in features if col not in df.columns]
+        target_col = "Booking Status"
+
+        required_col = features + [target_col]
+
+        missing_cols = list(set(required_col) - set(df.columns))
 
         if missing_cols:
             raise KeyError(f"Missing columns: {missing_cols}")
 
-        df = df[features].copy()
+        df = df[required_col].copy()
 
-        invalid_statuses = ['Cancelled by Customer','Incomplete']
+        logger.info("Feature selection completed.")
 
-        df = df[~df['Booking Status'].isin(invalid_statuses)].copy()
+        invalid_statuses = {"Cancelled by Customer","Incomplete"}
 
-        df['target'] = (df['Booking Status'] == 'Completed').astype(int)
+        df = df[~df[target_col].isin(invalid_statuses)].copy()
 
-        logger.info("Target column created.")
+        logger.info("Invalid rows removed.")
+
+        df["target"] = (df[target_col] == "Completed").astype("int8")
+
+        logger.info("Target column created successfully.")
 
         return df
 
-    except Exception:
-        logger.exception("Error during feature engineering.")
+    except KeyError as e:
+        logger.exception(f"Column validation failed: {e}")
         raise
+
+    except Exception as e:
+        logger.exception(f"Unexpected error during feature engineering: {e}")
+        raise
+    
     
 def save_data(df: pd.DataFrame, output_path: str) -> None:
     """
