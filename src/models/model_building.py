@@ -1,3 +1,5 @@
+import json
+
 import numpy as np
 import pandas as pd
 import os
@@ -333,6 +335,24 @@ def save_model(model: LGBMClassifier) -> None:
         )
 
 
+def save_run_info(run_id: str) -> None:
+    try:
+        logger.info("Saving run info...")
+
+        run_info_path = os.path.join(
+            "models",
+            f"run_info.json"
+        )
+
+        with open(run_info_path, "w") as f:
+            json.dump({"run_id": run_id}, f, indent=4)
+
+        logger.info("Run info saved successfully.")
+        
+    except Exception:
+        logger.exception("Unexpected error while saving run info.")
+
+
 def main() -> None:
 
     try:
@@ -389,7 +409,7 @@ def main() -> None:
             )
             return
 
-        with mlflow.start_run():
+        with mlflow.start_run() as run:
 
             mlflow.log_params(params)
 
@@ -479,6 +499,8 @@ def main() -> None:
             mlflow.log_artifact(
                 "models/lightgbm_model.pkl"
             )
+            
+            save_run_info(run.info.run_id)
 
             logger.info(
                 "MLflow tracking completed successfully."

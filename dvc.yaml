@@ -44,3 +44,14 @@ stages:
     outs:
     - models/lightgbm_model.pkl
     - models/scaler.pkl
+  
+  model_evaluation:
+    cmd: python src/models/model_evaluation.py
+    deps:
+    - models/lightgbm_model.pkl
+    - models/scaler.pkl
+    - src/models/model_evaluation.py
+    - data/processed/test.csv
+    - src/models/classification_evaluator.py
+    outs:
+    - reports/evaluation_report.json

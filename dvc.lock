@@ -61,19 +61,19 @@ stages:
       size: 5536364
     - path: params.yaml
       hash: md5
-      md5: bcc3363e440ccb987bd570c9ad2c4882
-      size: 227
+      md5: 591f144a6019e775cd7e7245ed9c8200
+      size: 226
     - path: src/models/model_building.py
       hash: md5
-      md5: 71596c626eb05826621c94e0f52b663c
-      size: 11284
+      md5: 691c6cbc30e36e2aef176b2cba52b3d0
+      size: 11827
     params:
       params.yaml:
         model_building.class_weight: balanced
         model_building.colsample_bytree: 0.7
         model_building.learning_rate: 0.01
         model_building.min_child_samples: 50
-        model_building.n_estimators: 1000
+        model_building.n_estimators: 999
         model_building.num_leaves: 31
         model_building.random_state: 42
         model_building.reg_alpha: 1
@@ -82,9 +82,37 @@ stages:
     outs:
     - path: models/lightgbm_model.pkl
       hash: md5
-      md5: 2b6506a676b15f0475665103a93b8e9a
-      size: 3361790
+      md5: 01c633fcd24ebb8cd7fd12e651a65e9d
+      size: 3361789
     - path: models/scaler.pkl
       hash: md5
       md5: 9b3a26183d25fbd3a236ddf2dc93165b
       size: 855
+  model_evaluation:
+    cmd: python src/models/model_evaluation.py
+    deps:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 1bf640d294a1419927bc30b99372c3b4
+      size: 1411613
+    - path: models/lightgbm_model.pkl
+      hash: md5
+      md5: 01c633fcd24ebb8cd7fd12e651a65e9d
+      size: 3361789
+    - path: models/scaler.pkl
+      hash: md5
+      md5: 9b3a26183d25fbd3a236ddf2dc93165b
+      size: 855
+    - path: src/models/classification_evaluator.py
+      hash: md5
+      md5: 88c2abb1cc7e5f6586bc0403c882b9b2
+      size: 2189
+    - path: src/models/model_evaluation.py
+      hash: md5
+      md5: 2654918d48c38788dfd93cfb13aec1c3
+      size: 8252
+    outs:
+    - path: reports/evaluation_report.json
+      hash: md5
+      md5: 2b4bb90253828dab32700b1d9338aea0
+      size: 186
