@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import os
+import yaml
 import logging
 
 from typing import Optional
@@ -31,6 +32,28 @@ if not logger.handlers:
     logger.addHandler(console_handler)
     logger.addHandler(file_handler)
 
+# load params
+def load_params(file_path: str) -> dict:
+    try:
+        logger.info("Loading parameters...")
+
+        with open(file_path, 'r') as f:
+            params = yaml.safe_load(f)['feature_engineering']
+            
+        logger.info("Parameters loaded successfully.")
+
+        return params
+
+    except FileNotFoundError:
+        logger.exception("Parameter file not found.")
+
+    except ValueError:
+        logger.exception("Error parsing parameter file.")
+
+    except Exception:
+        logger.exception("Unexpected error while loading parameters.")
+
+    return None
 
 # Load data
 def load_data(file_path: str) -> pd.DataFrame:
@@ -147,12 +170,12 @@ def encode_categorical_features(df: pd.DataFrame) -> pd.DataFrame:
 
 
 # split data
-def split_data_into_train_test_data(df: pd.DataFrame) -> tuple[
+def split_data_into_train_test_data(df: pd.DataFrame, params: dict) -> tuple[
     Optional[pd.DataFrame],
     Optional[pd.DataFrame]
 ]:
     
-    train_df, test_df = train_test_split(df, test_size=0.2, random_state=42, shuffle=True, stratify=df['target'])
+    train_df, test_df = train_test_split(df, test_size=params['test_size'], random_state=params['random_state'], shuffle=True, stratify=df['target'])
     
     return train_df, test_df
 
@@ -475,7 +498,9 @@ def main() -> None:
 
         df = encode_categorical_features(df)
         
-        train_df, test_df = split_data_into_train_test_data(df)
+        params = load_params("params.yaml")
+
+        train_df, test_df = split_data_into_train_test_data(df, params)
         
         train_df, test_df = handle_missing_values(train_df, test_df)
 

@@ -1,7 +1,11 @@
+feature_engineering:
+  test_size: 0.25
+  random_state: 42
+
 model_building:
   learning_rate: 0.01
-  n_estimators: 999
-  num_leaves: 31
+  n_estimators: 1000
+  num_leaves: 32
   min_child_samples: 50
   subsample: 0.8
   colsample_bytree: 0.7
